@@ -12,12 +12,6 @@ const HomePage = () => {
     return searchParams.get("keyword") || "";
   });
 
-  // React.useEffect(() => {
-  //   getActiveNotes().then(({ data }) => {
-  //     setNotes(data);
-  //   });
-  // }, []);
-
   React.useEffect(() => {
     const getNotes = async () => {
       const { data } = await getActiveNotes();

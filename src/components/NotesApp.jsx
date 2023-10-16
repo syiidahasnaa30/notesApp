@@ -38,7 +38,10 @@ const NotesApp = () => {
   if (user === null) {
     return (
       <>
-        <header>Note App</header>
+        <header>
+          <h1>Notes App</h1>
+          <Navigation user={user} />
+        </header>
         <Routes>
           <Route
             path="/*"
@@ -53,7 +56,7 @@ const NotesApp = () => {
     <>
       <header>
         <h1>Notes App</h1>
-        <Navigation />
+        <Navigation user={user} logout={onLogOut} />
       </header>
       <main>
         <Routes>
