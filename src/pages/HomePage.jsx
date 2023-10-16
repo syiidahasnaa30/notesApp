@@ -1,70 +1,53 @@
 import React from "react";
 import NoteList from "../components/NoteList";
 import SearchBar from "../components/SearchBar";
-import { getActiveNotes } from "../utils/local-data";
+import { getActiveNotes } from "../utils/network-data";
 import { GrAdd } from "react-icons/gr";
 import { Link, useSearchParams } from "react-router-dom";
-import PropTypes from "prop-types";
 
-function HomePageWrapper() {
+const HomePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [notes, setNotes] = React.useState([]);
+  const [keyword, setKeyword] = React.useState(() => {
+    return searchParams.get("keyword") || "";
+  });
 
-  const keyword = searchParams.get("keyword");
-  function changeSearchParams(keyword) {
+  // React.useEffect(() => {
+  //   getActiveNotes().then(({ data }) => {
+  //     setNotes(data);
+  //   });
+  // }, []);
+
+  React.useEffect(() => {
+    const getNotes = async () => {
+      const { data } = await getActiveNotes();
+      setNotes(data);
+    };
+    getNotes();
+  }, []);
+
+  const onKeywordChangeHandler = (keyword) => {
+    setKeyword(keyword);
     setSearchParams({ keyword });
-  }
+  };
+  const filteredNote = notes.filter((note) => {
+    return note.title.toLowerCase().includes(keyword.toLowerCase());
+  });
 
   return (
-    <HomePage defaultKeyword={keyword} keywordChange={changeSearchParams} />
+    <>
+      <h2>Active Note</h2>
+      <SearchBar keyword={keyword} keywordChange={onKeywordChangeHandler} />
+      <NoteList notes={filteredNote} />
+      <div className="homepage__action">
+        <button className="action">
+          <Link to="/notes/new">
+            <GrAdd />
+          </Link>
+        </button>
+      </div>
+    </>
   );
-}
-class HomePage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      notes: getActiveNotes(),
-      keyword: props.defaultKeyword || "",
-    };
-
-    this.onKeywordChangeHandler = this.onKeywordChangeHandler.bind(this);
-  }
-
-  onKeywordChangeHandler(keyword) {
-    this.setState(() => {
-      return {
-        keyword,
-      };
-    });
-    this.props.keywordChange(keyword);
-  }
-
-  render() {
-    const filteredNote = this.state.notes.filter((note) => {
-      return note.title
-        .toLowerCase()
-        .includes(this.state.keyword.toLowerCase());
-    });
-    return (
-      <>
-        <h2>Active Note</h2>
-        <SearchBar
-          keyword={this.state.keyword}
-          keywordChange={this.onKeywordChangeHandler}
-        />
-        <NoteList notes={filteredNote} />
-        <div className="homepage__action">
-          <button className="action">
-            <Link to="/notes/new">
-              <GrAdd />
-            </Link>
-          </button>
-        </div>
-      </>
-    );
-  }
-}
-HomePage.propTypes = {
-  defaultKeyword: PropTypes.string,
-  keywordChange: PropTypes.func.isRequired,
 };
-export default HomePageWrapper;
+
+export default HomePage;

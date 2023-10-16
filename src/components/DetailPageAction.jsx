@@ -1,5 +1,5 @@
 import React from "react";
-import { deleteNote, archiveNote, unarchiveNote } from "../utils/local-data";
+import { deleteNote, archiveNote, unarchiveNote } from "../utils/network-data";
 import { FaTrashAlt } from "react-icons/fa";
 import { BiArchiveIn, BiArchiveOut } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
@@ -8,8 +8,8 @@ import PropTypes from "prop-types";
 const DetailPageAction = ({ archived, id }) => {
   const navigate = useNavigate();
 
-  const moveNoteToDeleted = () => {
-    deleteNote(id);
+  const moveNoteToDeleted = async () => {
+    await deleteNote(id);
     if (archived) {
       navigate("/archive");
     } else {
@@ -17,42 +17,33 @@ const DetailPageAction = ({ archived, id }) => {
     }
   };
 
-  const moveNoteToArchived = () => {
-    archiveNote(id);
+  const moveNoteToArchived = async () => {
+    await archiveNote(id);
     navigate("/archive");
   };
 
-  const removeNoteFromArchive = () => {
-    unarchiveNote(id);
+  const removeNoteFromArchive = async () => {
+    await unarchiveNote(id);
     navigate("/");
   };
 
-  if (archived) {
-    return (
-      <div className="detail-page__action" onClick={() => moveNoteToDeleted()}>
-        <button className="action">
-          <FaTrashAlt />
-        </button>
-        <button className="action" onClick={() => removeNoteFromArchive()}>
-          <BiArchiveOut />
-        </button>
-      </div>
-    );
-  }
   return (
     <div className="detail-page__action">
       <button className="action" onClick={() => moveNoteToDeleted()}>
         <FaTrashAlt />
       </button>
-      <button className="action" onClick={() => moveNoteToArchived()}>
-        <BiArchiveIn />
+      <button
+        className="action"
+        onClick={archived ? removeNoteFromArchive : moveNoteToArchived}
+      >
+        {archived ? <BiArchiveOut /> : <BiArchiveIn />}
       </button>
     </div>
   );
 };
 
 DetailPageAction.propTypes = {
-  archived: PropTypes.bool.isRequired,
+  archived: PropTypes.bool,
   id: PropTypes.string.isRequired,
 };
 

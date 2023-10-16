@@ -1,66 +1,38 @@
 import React from "react";
 import NoteList from "../components/NoteList";
 import SearchBar from "../components/SearchBar";
-import { getArchivedNotes } from "../utils/local-data";
+import { getArchivedNotes } from "../utils/network-data";
 import { useSearchParams } from "react-router-dom";
 import PropTypes from "prop-types";
 
-function ArchivedPageWrapper() {
+const ArchievedPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [notes, setNotes] = React.useState([]);
+  const [keyword, setKeyword] = React.useState(() => {
+    return searchParams.get("keyword") || "";
+  });
 
-  const keyword = searchParams.get("keyword");
+  React.useEffect(() => {
+    getArchivedNotes().then(({ data }) => {
+      setNotes(data);
+    });
+  }, []);
 
-  function changeSearchParams(keyword) {
+  const onKeywordChangeHandler = (keyword) => {
+    setKeyword(keyword);
     setSearchParams({ keyword });
-  }
+  };
+
+  const filteredNote = notes.filter((note) => {
+    return note.title.toLowerCase().includes(keyword.toLowerCase());
+  });
 
   return (
-    <ArchievedPage
-      defaultKeyword={keyword}
-      keywordChange={changeSearchParams}
-    />
+    <>
+      <h2>Archived Note</h2>
+      <SearchBar keyword={keyword} keywordChange={onKeywordChangeHandler} />
+      <NoteList notes={filteredNote} />
+    </>
   );
-}
-class ArchievedPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      notes: getArchivedNotes(),
-      keyword: props.defaultKeyword || "",
-    };
-
-    this.onKeywordChangeHandler = this.onKeywordChangeHandler.bind(this);
-  }
-
-  onKeywordChangeHandler(keyword) {
-    this.setState(() => {
-      return {
-        keyword,
-      };
-    });
-    this.props.keywordChange(keyword);
-  }
-
-  render() {
-    const filteredNote = this.state.notes.filter((note) => {
-      return note.title
-        .toLowerCase()
-        .includes(this.state.keyword.toLowerCase());
-    });
-    return (
-      <>
-        <h2>Archived Note</h2>
-        <SearchBar
-          keyword={this.state.keyword}
-          keywordChange={this.onKeywordChangeHandler}
-        />
-        <NoteList notes={filteredNote} />
-      </>
-    );
-  }
-}
-ArchievedPage.propTypes = {
-  defaultKeyword: PropTypes.string,
-  keywordChange: PropTypes.func.isRequired,
 };
-export default ArchivedPageWrapper;
+export default ArchievedPage;

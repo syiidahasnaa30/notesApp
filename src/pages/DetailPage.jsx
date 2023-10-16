@@ -1,12 +1,22 @@
 import React from "react";
 import { showFormattedDate } from "../utils/index";
 import { useParams } from "react-router-dom";
-import { getNote } from "../utils/local-data";
+import { getNote } from "../utils/network-data";
 import DetailPageAction from "../components/DetailPageAction";
 
 const DetailPage = () => {
   const { id } = useParams();
-  const note = getNote(id);
+  const [note, setNote] = React.useState("");
+
+  React.useEffect(() => {
+    const getDetailNote = async () => {
+      const { error, data } = await getNote(id);
+      if (!error) {
+        setNote(data);
+      }
+    };
+    getDetailNote();
+  }, []);
 
   return (
     <div className="detail-page">
