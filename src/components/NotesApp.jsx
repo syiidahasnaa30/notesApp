@@ -7,23 +7,15 @@ import Navigation from "./Navigation";
 import PageNotFound from "../pages/PageNotFound";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
-import { Routes, Route, Link } from "react-router-dom";
-import { putAccessToken, getUserLogged } from "../utils/network-data";
+import { Routes, Route } from "react-router-dom";
+import {
+  putAccessToken,
+  getUserLogged,
+  getAccessToken,
+} from "../utils/network-data";
 
-const NotesApp = () => {
-  const getUser = async () => {
-    const { error, data } = await getUserLogged();
-    if (error) {
-      return null;
-    } else {
-      return data;
-    }
-  };
-
-  const [user, setUser] = React.useState(() => {
-    getUser();
-  });
-
+const NotesApp = ({ toggleTheme }) => {
+  const [user, setUser] = React.useState(null);
   const onLoginSuccess = async ({ accessToken }) => {
     putAccessToken(accessToken);
     const { error, data } = await getUserLogged();
@@ -40,7 +32,7 @@ const NotesApp = () => {
       <>
         <header>
           <h1>Notes App</h1>
-          <Navigation user={user} />
+          <Navigation user={user} toggleTheme={toggleTheme} />
         </header>
         <Routes>
           <Route
@@ -56,7 +48,7 @@ const NotesApp = () => {
     <>
       <header>
         <h1>Notes App</h1>
-        <Navigation user={user} logout={onLogOut} />
+        <Navigation user={user} logout={onLogOut} toggleTheme={toggleTheme} />
       </header>
       <main>
         <Routes>
