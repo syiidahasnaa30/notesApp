@@ -1,6 +1,7 @@
 import React from "react";
 import { BsCheck2Circle } from "react-icons/bs";
 import PropTypes from "prop-types";
+import { LanguageConsumer } from "../contexts/LanguageContext";
 
 class NoteInput extends React.Component {
   constructor(props) {
@@ -37,29 +38,41 @@ class NoteInput extends React.Component {
   }
   render() {
     return (
-      <form
-        className="add-new-page__input"
-        onSubmit={this.onSubmitEventHandler}
-      >
-        <input
-          type="text"
-          placeholder="Your Secret Note"
-          className="add-new-page__input__title"
-          value={this.state.title}
-          onChange={this.onTitleChangeEventHandler}
-        />
-        <div
-          className="add-new-page__input__body"
-          data-placeholder="My secret note"
-          contentEditable
-          onInput={this.onInputHandler}
-        />
-        <div className="add-new-page__action">
-          <button className="action" type="submit">
-            <BsCheck2Circle />
-          </button>
-        </div>
-      </form>
+      <LanguageConsumer>
+        {({ language }) => {
+          return (
+            <form
+              className="add-new-page__input"
+              onSubmit={this.onSubmitEventHandler}
+            >
+              <input
+                type="text"
+                placeholder={
+                  language === "eng" ? "Your secret note" : "Catatan rahasiamu"
+                }
+                className="add-new-page__input__title"
+                value={this.state.title}
+                onChange={this.onTitleChangeEventHandler}
+              />
+              <div
+                className="add-new-page__input__body"
+                data-placeholder={
+                  language === "eng"
+                    ? "This is my secret note..."
+                    : "Ini adalah catatan rahasiaku..."
+                }
+                contentEditable
+                onInput={this.onInputHandler}
+              />
+              <div className="add-new-page__action">
+                <button className="action" type="submit">
+                  <BsCheck2Circle />
+                </button>
+              </div>
+            </form>
+          );
+        }}
+      </LanguageConsumer>
     );
   }
 }

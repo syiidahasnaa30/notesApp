@@ -3,8 +3,11 @@ import LoginInput from "../components/LoginInput";
 import { Link } from "react-router-dom";
 import { PropTypes } from "prop-types";
 import { login } from "../utils/network-data";
+import LanguageContext from "../contexts/LanguageContext";
 
 const LoginPage = ({ onLoginSuccess }) => {
+  const { language } = React.useContext(LanguageContext);
+
   const onLogin = async ({ email, password }) => {
     const { error, data } = await login({ email, password });
     if (error) {
@@ -15,10 +18,18 @@ const LoginPage = ({ onLoginSuccess }) => {
   };
   return (
     <section className="login-page">
-      <h2>Login untuk menggunakan aplikasi</h2>
+      <h2>
+        {language === "eng"
+          ? "Please login to use this notes"
+          : "Masuk untuk menggunakan catatan ini"}
+      </h2>
       <LoginInput onLogin={onLogin} />
       <p>
-        Belum Punya Akun?<Link to="/register">Buat Akun</Link>
+        {language === "eng" ? "Don't have any account? " : "Belum punya akun? "}
+        <Link to="/register">
+          {" "}
+          {language === "eng" ? "Create an account" : "Buat akun"}
+        </Link>
       </p>
     </section>
   );

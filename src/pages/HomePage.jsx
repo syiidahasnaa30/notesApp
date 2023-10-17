@@ -4,8 +4,10 @@ import SearchBar from "../components/SearchBar";
 import { getActiveNotes } from "../utils/network-data";
 import { GrAdd } from "react-icons/gr";
 import { Link, useSearchParams } from "react-router-dom";
+import LanguageContext from "../contexts/LanguageContext";
 
 const HomePage = () => {
+  const { language } = React.useContext(LanguageContext);
   const [searchParams, setSearchParams] = useSearchParams();
   const [notes, setNotes] = React.useState([]);
   const [keyword, setKeyword] = React.useState(() => {
@@ -30,7 +32,7 @@ const HomePage = () => {
 
   return (
     <>
-      <h2>Active Note</h2>
+      <h2>{language === "eng" ? "Active Note" : "Catatan Aktif"}</h2>
       <SearchBar keyword={keyword} keywordChange={onKeywordChangeHandler} />
       <NoteList notes={filteredNote} />
       <div className="homepage__action">

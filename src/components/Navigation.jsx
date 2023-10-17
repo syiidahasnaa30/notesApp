@@ -7,7 +7,7 @@ import { MdGTranslate } from "react-icons/md";
 import { FiLogOut } from "react-icons/fi";
 import ThemeContext from "../contexts/ThemeContext";
 
-const Navigation = ({ user, logout, toggleTheme }) => {
+const Navigation = ({ user, logout, toggleTheme, toggleLanguage }) => {
   const { theme } = React.useContext(ThemeContext);
   if (user === null) {
     return (
@@ -19,7 +19,9 @@ const Navigation = ({ user, logout, toggleTheme }) => {
             </button>
           </li>
           <li>
-            <MdGTranslate />
+            <button className="button-logout" onClick={toggleLanguage}>
+              <MdGTranslate />
+            </button>
           </li>
         </ul>
       </nav>
@@ -44,7 +46,9 @@ const Navigation = ({ user, logout, toggleTheme }) => {
           </button>
         </li>
         <li>
-          <MdGTranslate />
+          <button className="button-logout" onClick={toggleLanguage}>
+            <MdGTranslate />
+          </button>
         </li>
         <li>
           <button className="button-logout" onClick={logout}>

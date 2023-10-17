@@ -4,8 +4,10 @@ import SearchBar from "../components/SearchBar";
 import { getArchivedNotes } from "../utils/network-data";
 import { useSearchParams } from "react-router-dom";
 import PropTypes from "prop-types";
+import LanguageContext from "../contexts/LanguageContext";
 
 const ArchievedPage = () => {
+  const { language } = React.useContext(LanguageContext);
   const [searchParams, setSearchParams] = useSearchParams();
   const [notes, setNotes] = React.useState([]);
   const [keyword, setKeyword] = React.useState(() => {
@@ -29,7 +31,7 @@ const ArchievedPage = () => {
 
   return (
     <>
-      <h2>Archived Note</h2>
+      <h2>{language === "eng" ? "Archived Note" : "Arsip Catatan"}</h2>
       <SearchBar keyword={keyword} keywordChange={onKeywordChangeHandler} />
       <NoteList notes={filteredNote} />
     </>

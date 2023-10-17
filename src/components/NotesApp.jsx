@@ -13,9 +13,12 @@ import {
   getUserLogged,
   getAccessToken,
 } from "../utils/network-data";
+import LanguageContext from "../contexts/LanguageContext";
 
-const NotesApp = ({ toggleTheme }) => {
+const NotesApp = ({ toggleTheme, toggleLanguage }) => {
   const [user, setUser] = React.useState(null);
+  const { language } = React.useContext(LanguageContext);
+
   const onLoginSuccess = async ({ accessToken }) => {
     putAccessToken(accessToken);
     const { error, data } = await getUserLogged();
@@ -31,8 +34,12 @@ const NotesApp = ({ toggleTheme }) => {
     return (
       <>
         <header>
-          <h1>Notes App</h1>
-          <Navigation user={user} toggleTheme={toggleTheme} />
+          <h1>{language === "eng" ? "My Notes" : "Catatanku"}</h1>
+          <Navigation
+            user={user}
+            toggleTheme={toggleTheme}
+            toggleLanguage={toggleLanguage}
+          />
         </header>
         <Routes>
           <Route
@@ -47,8 +54,13 @@ const NotesApp = ({ toggleTheme }) => {
   return (
     <>
       <header>
-        <h1>Notes App</h1>
-        <Navigation user={user} logout={onLogOut} toggleTheme={toggleTheme} />
+        <h1>{language === "eng" ? "My Notes" : "Catatanku"}</h1>
+        <Navigation
+          user={user}
+          logout={onLogOut}
+          toggleTheme={toggleTheme}
+          toggleLanguage={toggleLanguage}
+        />
       </header>
       <main>
         <Routes>
