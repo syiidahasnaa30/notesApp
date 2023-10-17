@@ -3,8 +3,9 @@ import useInput from "../hooks/useInput";
 import { register } from "../utils/network-data";
 import { useNavigate } from "react-router-dom";
 import LanguageContext from "../contexts/LanguageContext";
+import PropTypes from "prop-types";
 
-const RegisterInput = () => {
+const RegisterInput = ({ setLoading }) => {
   const { language } = React.useContext(LanguageContext);
   const [name, onNameChange] = useInput("");
   const [email, onEmailChange] = useInput("");
@@ -12,12 +13,12 @@ const RegisterInput = () => {
   const navigate = useNavigate();
 
   const onRegister = async (event) => {
+    setLoading(true);
     event.preventDefault();
     const { error } = await register({ name, email, password });
-
+    setLoading(false);
     if (error) {
       console.log(error);
-      alert(error);
     } else {
       alert("Register Success");
       navigate("/");
@@ -42,5 +43,7 @@ const RegisterInput = () => {
     </form>
   );
 };
-
+RegisterInput.propTypes = {
+  setLoading: PropTypes.func.isRequired,
+};
 export default RegisterInput;

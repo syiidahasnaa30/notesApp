@@ -4,8 +4,10 @@ import SearchBar from "../components/SearchBar";
 import { getArchivedNotes } from "../utils/network-data";
 import { useSearchParams } from "react-router-dom";
 import LanguageContext from "../contexts/LanguageContext";
+import LoadingScreen from "../components/LoadingScreen";
 
 const ArchievedPage = () => {
+  const [loading, setLoading] = React.useState(false);
   const { language } = React.useContext(LanguageContext);
   const [searchParams, setSearchParams] = useSearchParams();
   const [notes, setNotes] = React.useState([]);
@@ -14,9 +16,11 @@ const ArchievedPage = () => {
   });
 
   React.useEffect(() => {
+    setLoading(true);
     getArchivedNotes().then(({ data }) => {
       setNotes(data);
     });
+    setLoading(false);
   }, []);
 
   const onKeywordChangeHandler = (keyword) => {
@@ -30,6 +34,7 @@ const ArchievedPage = () => {
 
   return (
     <>
+      {loading && <LoadingScreen />}
       <h2>{language === "eng" ? "Archived Note" : "Arsip Catatan"}</h2>
       <SearchBar keyword={keyword} keywordChange={onKeywordChangeHandler} />
       <NoteList notes={filteredNote} />

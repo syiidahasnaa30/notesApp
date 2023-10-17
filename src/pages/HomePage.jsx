@@ -5,8 +5,10 @@ import { getActiveNotes } from "../utils/network-data";
 import { GrAdd } from "react-icons/gr";
 import { Link, useSearchParams } from "react-router-dom";
 import LanguageContext from "../contexts/LanguageContext";
+import LoadingScreen from "../components/LoadingScreen";
 
 const HomePage = () => {
+  const [loading, setLoading] = React.useState(false);
   const { language } = React.useContext(LanguageContext);
   const [searchParams, setSearchParams] = useSearchParams();
   const [notes, setNotes] = React.useState([]);
@@ -15,11 +17,13 @@ const HomePage = () => {
   });
 
   React.useEffect(() => {
+    setLoading(true);
     const getNotes = async () => {
       const { data } = await getActiveNotes();
       setNotes(data);
     };
     getNotes();
+    setLoading(false);
   }, []);
 
   const onKeywordChangeHandler = (keyword) => {
@@ -32,6 +36,7 @@ const HomePage = () => {
 
   return (
     <>
+      {loading && <LoadingScreen />}
       <h2>{language === "eng" ? "Active Note" : "Catatan Aktif"}</h2>
       <SearchBar keyword={keyword} keywordChange={onKeywordChangeHandler} />
       <NoteList notes={filteredNote} />

@@ -7,7 +7,7 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 
 const App = () => {
   const [theme, setTheme] = React.useState(
-    localStorage.getItem("theme") || "light"
+    localStorage.getItem("theme") || "dark"
   );
   const [language, setLanguange] = React.useState(
     localStorage.getItem("language") || "eng"
@@ -17,14 +17,12 @@ const App = () => {
     setTheme((prevTheme) => {
       return prevTheme === "dark" ? "light" : "dark";
     });
-    localStorage.setItem("theme", theme);
   };
 
   const toggleLanguage = () => {
     setLanguange((prevLanguage) => {
       return prevLanguage === "eng" ? "id" : "eng";
     });
-    localStorage.setItem("language", language);
   };
 
   const themeContextValue = React.useMemo(() => {
@@ -42,6 +40,8 @@ const App = () => {
   }, [language]);
 
   React.useEffect(() => {
+    localStorage.setItem("theme", theme);
+    localStorage.setItem("language", language);
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme, language]);
   return (

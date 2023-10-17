@@ -5,11 +5,13 @@ import { BiArchiveIn, BiArchiveOut } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const DetailPageAction = ({ archived, id }) => {
+const DetailPageAction = ({ archived, id, setLoading }) => {
   const navigate = useNavigate();
 
   const moveNoteToDeleted = async () => {
+    setLoading(true);
     await deleteNote(id);
+    setLoading(false);
     if (archived) {
       navigate("/archive");
     } else {
@@ -18,12 +20,16 @@ const DetailPageAction = ({ archived, id }) => {
   };
 
   const moveNoteToArchived = async () => {
+    setLoading(true);
     await archiveNote(id);
+    setLoading(false);
     navigate("/archive");
   };
 
   const removeNoteFromArchive = async () => {
+    setLoading(true);
     await unarchiveNote(id);
+    setLoading(false);
     navigate("/");
   };
 
@@ -45,6 +51,7 @@ const DetailPageAction = ({ archived, id }) => {
 DetailPageAction.propTypes = {
   archived: PropTypes.bool,
   id: PropTypes.string.isRequired,
+  setLoading: PropTypes.func.isRequired,
 };
 
 export default DetailPageAction;
