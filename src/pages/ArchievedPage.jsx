@@ -3,7 +3,6 @@ import NoteList from "../components/NoteList";
 import SearchBar from "../components/SearchBar";
 import { getArchivedNotes } from "../utils/network-data";
 import { useSearchParams } from "react-router-dom";
-import PropTypes from "prop-types";
 import LanguageContext from "../contexts/LanguageContext";
 
 const ArchievedPage = () => {

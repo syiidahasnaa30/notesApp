@@ -1,7 +1,7 @@
 import React from "react";
 import useInput from "../hooks/useInput";
 import LanguageContext from "../contexts/LanguageContext";
-
+import PropTypes from "prop-types";
 const LoginInput = ({ onLogin }) => {
   const { language } = React.useContext(LanguageContext);
   const [email, onEmailChange] = useInput("");
@@ -28,5 +28,9 @@ const LoginInput = ({ onLogin }) => {
       <button> {language === "eng" ? "Login" : "Masuk"}</button>
     </form>
   );
+};
+
+LoginInput.propTypes = {
+  onLogin: PropTypes.func.isRequired,
 };
 export default LoginInput;

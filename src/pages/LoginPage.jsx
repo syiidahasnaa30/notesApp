@@ -1,7 +1,7 @@
 import React from "react";
 import LoginInput from "../components/LoginInput";
 import { Link } from "react-router-dom";
-import { PropTypes } from "prop-types";
+import PropTypes from "prop-types";
 import { login } from "../utils/network-data";
 import LanguageContext from "../contexts/LanguageContext";
 

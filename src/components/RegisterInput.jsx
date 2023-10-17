@@ -42,4 +42,5 @@ const RegisterInput = () => {
     </form>
   );
 };
+
 export default RegisterInput;
