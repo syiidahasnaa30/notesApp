@@ -10,18 +10,27 @@ const RegisterInput = ({ setLoading }) => {
   const [name, onNameChange] = useInput("");
   const [email, onEmailChange] = useInput("");
   const [password, onPasswordChange] = useInput("");
+  const [confirmPassword, onConfirmPasswordChange] = useInput("");
   const navigate = useNavigate();
 
   const onRegister = async (event) => {
-    setLoading(true);
-    event.preventDefault();
-    const { error } = await register({ name, email, password });
-    setLoading(false);
-    if (error) {
-      console.log(error);
+    if (password !== confirmPassword) {
+      alert(
+        language === "eng"
+          ? "Password must same as Password Confirmation"
+          : "Pastikan kata sandi anda sesuai dengan konfirmasi kata sandi"
+      );
     } else {
-      alert("Register Success");
-      navigate("/");
+      setLoading(true);
+      event.preventDefault();
+      const { error } = await register({ name, email, password });
+      setLoading(false);
+      if (error) {
+        console.log(error);
+      } else {
+        alert("Register Success");
+        navigate("/");
+      }
     }
   };
   return (
@@ -38,6 +47,15 @@ const RegisterInput = ({ setLoading }) => {
         id="password"
         value={password}
         onChange={onPasswordChange}
+      />
+      <label htmlFor="confirmPassword">
+        {language === "eng" ? "Password Confirmation" : "Konfirmasi Kata Sandi"}
+      </label>
+      <input
+        type="password"
+        id="confirmPassword"
+        value={confirmPassword}
+        onChange={onConfirmPasswordChange}
       />
       <button>{language === "eng" ? "Register" : "Daftar"}</button>
     </form>
