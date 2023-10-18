@@ -8,12 +8,29 @@ import PageNotFound from "../pages/PageNotFound";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import { Routes, Route } from "react-router-dom";
-import { putAccessToken, getUserLogged } from "../utils/network-data";
+import {
+  putAccessToken,
+  getUserLogged,
+  getAccessToken,
+} from "../utils/network-data";
 import LanguageContext from "../contexts/LanguageContext";
 import PropTypes from "prop-types";
 
 const NotesApp = ({ toggleTheme, toggleLanguage }) => {
-  const [user, setUser] = React.useState(null);
+  const getUser = () => {
+    console.log("tipe access token : " + typeof getAccessToken());
+    if (getAccessToken() === null) {
+      console.log("Masuk kondisi undifined || null");
+      return null;
+    } else {
+      console.log("Diluar kondisi user null");
+      const { error, data } = getUserLogged();
+      return data;
+    }
+  };
+  const [user, setUser] = React.useState(() => {
+    return getUser();
+  });
   const { language } = React.useContext(LanguageContext);
 
   const onLoginSuccess = async ({ accessToken }) => {
@@ -26,6 +43,7 @@ const NotesApp = ({ toggleTheme, toggleLanguage }) => {
     putAccessToken("");
     setUser(null);
   };
+  console.log("user : " + user);
 
   if (user === null) {
     return (
