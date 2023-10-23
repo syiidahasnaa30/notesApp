@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { getNote } from "../utils/network-data";
 import DetailPageAction from "../components/DetailPageAction";
 import LoadingScreen from "../components/LoadingScreen";
+import PageNotFound from "./PageNotFound";
 
 const DetailPage = () => {
   const { id } = useParams();
@@ -11,20 +12,26 @@ const DetailPage = () => {
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    setLoading(true);
     const getDetailNote = async () => {
-      const { error, data } = await getNote(id);
-      if (!error) {
+      setLoading(true);
+      try {
+        const { error, data } = await getNote(id);
         setNote(data);
+      } catch (error) {
+        alert(error);
       }
+      setLoading(false);
     };
     getDetailNote();
-    setLoading(false);
   }, []);
 
+  if (!loading && note === "") {
+    return <PageNotFound />;
+  }
   return (
     <>
       {loading && <LoadingScreen />}
+
       <div className="detail-page">
         <h1 className="detail-page__title">{note.title}</h1>
         <p className="detail-page__createdAt">

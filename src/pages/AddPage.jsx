@@ -9,8 +9,12 @@ const AddPage = () => {
   const { language } = React.useContext(LanguageContext);
 
   async function onAddNoteHandler(note) {
-    await addNote({ ...note });
-    navigate("/");
+    try {
+      await addNote({ ...note });
+      navigate("/");
+    } catch (error) {
+      alert(error);
+    }
   }
   return (
     <section>

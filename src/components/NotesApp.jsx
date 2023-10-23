@@ -18,12 +18,9 @@ import PropTypes from "prop-types";
 
 const NotesApp = ({ toggleTheme, toggleLanguage }) => {
   const getUser = () => {
-    console.log("tipe access token : " + typeof getAccessToken());
     if (getAccessToken() === null) {
-      console.log("Masuk kondisi undifined || null");
       return null;
     } else {
-      console.log("Diluar kondisi user null");
       const { error, data } = getUserLogged();
       return data;
     }

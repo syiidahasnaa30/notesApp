@@ -17,13 +17,17 @@ const HomePage = () => {
   });
 
   React.useEffect(() => {
-    setLoading(true);
     const getNotes = async () => {
-      const { data } = await getActiveNotes();
-      setNotes(data);
+      setLoading(true);
+      try {
+        const { data } = await getActiveNotes();
+        setNotes(data);
+      } catch (error) {
+        alert(error);
+      }
+      setLoading(false);
     };
     getNotes();
-    setLoading(false);
   }, []);
 
   const onKeywordChangeHandler = (keyword) => {

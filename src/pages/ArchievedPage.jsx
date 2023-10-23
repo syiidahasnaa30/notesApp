@@ -16,11 +16,17 @@ const ArchievedPage = () => {
   });
 
   React.useEffect(() => {
-    setLoading(true);
-    getArchivedNotes().then(({ data }) => {
-      setNotes(data);
-    });
-    setLoading(false);
+    const getNotes = async () => {
+      setLoading(true);
+      try {
+        const { data } = await getArchivedNotes();
+        setNotes(data);
+      } catch (error) {
+        alert(error);
+      }
+      setLoading(false);
+    };
+    getNotes();
   }, []);
 
   const onKeywordChangeHandler = (keyword) => {

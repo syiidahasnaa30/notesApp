@@ -112,6 +112,7 @@ async function getNote(id) {
   const responseJson = await response.json();
 
   if (responseJson.status !== "success") {
+    throw new Error(responseJson.message);
     return { error: true, data: null };
   }
 

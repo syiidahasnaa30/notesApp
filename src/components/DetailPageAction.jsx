@@ -9,13 +9,17 @@ const DetailPageAction = ({ archived, id, setLoading }) => {
   const navigate = useNavigate();
 
   const moveNoteToDeleted = async () => {
-    setLoading(true);
-    await deleteNote(id);
-    setLoading(false);
-    if (archived) {
-      navigate("/archive");
-    } else {
-      navigate("/");
+    try {
+      setLoading(true);
+      await deleteNote(id);
+      setLoading(false);
+      if (archived) {
+        navigate("/archive");
+      } else {
+        navigate("/");
+      }
+    } catch (error) {
+      alert(error);
     }
   };
 
